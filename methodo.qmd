@@ -16,9 +16,7 @@ Autrement dit, il s'agit d'une sorte de *z-score* calculé à partir de la plus 
 On calcule un score total :
 
 - Soit comme somme des scores par variables ;
-- Soit comme somme **pondérée** des scores.
-
--  Pour l'instant la pondération retenue : 
+- Soit comme somme **pondérée** des scores, avec (pour l'instant) la pondération suivante : 
   - 0.5 x PIB ;
   - 0.2 x Chomage ;
   - 0.2 x Solde;
