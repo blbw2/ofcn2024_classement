@@ -24,4 +24,4 @@ On calcule un score total :
   - 0.2 x Solde;
   - 0.1 x IPCH.
   
-Dernière remarque : dans quelques cas, les participants ont renseigné des valeurs (IPCH, Chômage) en moyenne annuelle, alors que pour l'OFCN 2022, les valeurs **en fin d'année** avaient été demandées. Dans ces cas-là, les $\varepsilon$ ont bien été calculée en prenant en compte s'il s'agit d'une prévision de moyenne annuelle ou de fin d'année.
+Dernière remarque : dans quelques cas, les participants ont renseigné des valeurs (IPCH, Chômage) en moyenne annuelle, alors que pour l'OFCN 2022, les valeurs **en fin d'année** avaient été demandées. Dans ces cas-là, les $\varepsilon$ ont bien été calculés en prenant en compte s'il s'agit d'une prévision de moyenne annuelle ou de fin d'année.
