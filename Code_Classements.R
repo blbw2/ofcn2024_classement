@@ -20,6 +20,11 @@ outturn2023b <- data.frame(
   variable = c("PIB","IPCH", "Chomage",  "Solde public"),
   "out2023" = c(1.1,5.7,7.3,-5.5)
 )
+
+outturn2023c <- data.frame(
+  variable = c("PIB","IPCH", "Chomage",  "Solde public"),
+  "out2023" = c(1.1,5.7,7.3,-5.5)
+)
 # piblast = get_insee_idbank("011779991","011779992",lastNObservations = 1)
 # pibfirst = get_insee_idbank("010548500", "010548499", lastNObservations = 1)
 
@@ -78,16 +83,33 @@ tableaux2022 <- readRDS("tableaux_corriges.rds") #|>
 
   composantes = c("PIB", "Conso Ménages", "Conso APU", "FBCF", "Exports", "Imports", "IPCH", "Chomage", "Solde public")
 
+  
+## NB::
+## FMI --> Chomage et IPCH en MA
+## MS : Chomage et IPCH en MA
+## SG: Chomage France Metropole
 
+# prev2022 <- bind_rows(map(tableaux2022, function(x) x %>% slice(17:20, 24:25, 30,32,36) %>% select(Prev2022_2023 = `2023`))) %>% 
+#   mutate(institut = rep(names(tableaux2022), each = 9),
+#          variable = rep(composantes, times = length(names(tableaux2022))),
+#          Prev2022_2023 = round(digits = 1, as.numeric(Prev2022_2023)))%>%
+#   #group_by(Institut) %>% 
+#   filter(variable %in% c("PIB", "IPCH","Chomage","Solde public")) |> 
+#   mutate(Ecart2022_2023 = Prev2022_2023-rep(pull(outturn2023, "out2023"),times = length(names(tableaux2022))))
+#   ungroup()
+  
 prev2022 <- bind_rows(map(tableaux2022, function(x) x %>% slice(17:20, 24:25, 30,32,36) %>% select(Prev2022_2023 = `2023`))) %>% 
-  mutate(institut = rep(names(tableaux2022), each = 9),
-         variable = rep(composantes, times = length(names(tableaux2022))),
-         Prev2022_2023 = round(digits = 1, as.numeric(Prev2022_2023)))%>%
-  #group_by(Institut) %>% 
-  filter(variable %in% c("PIB", "IPCH","Chomage","Solde public")) |> 
-  mutate(Ecart2022_2023 = Prev2022_2023-rep(pull(outturn2023, "out2023"),times = length(names(tableaux2022)))) %>% 
-  filter(!institut %in%  c("Morgan Stanley")) %>% 
-  ungroup()
+    mutate(institut = rep(names(tableaux2022), each = 9),
+           variable = rep(composantes, times = length(names(tableaux2022))),
+           Prev2022_2023 = round(digits = 1, as.numeric(Prev2022_2023)))%>%
+    merge(outturn2023 |> rename(out2023fa = out2023), by ="variable") |> 
+    merge(outturn2023b |> rename(out2023ma= out2023), by = "variable") |> 
+    merge(outturn2023c, by = "variable") |> 
+    filter(variable %in% c("PIB", "IPCH","Chomage","Solde public"),
+           (!institut == "Insee")) |> 
+    mutate(Ecart2022_2023 = case_when(institut %in% c("Morgan Stanley", "FMI") ~Prev2022_2023-out2023ma,
+                                      institut %in% c("SocGen") ~Prev2022_2023-out2023,
+                                      TRUE ~ Prev2022_2023-out2023fa))
 
 Classement_2023 <- prev2022 |> 
   group_by(variable) |> 
@@ -230,10 +252,7 @@ prev2022scores <- prev2022 |>
 
 Classement_scores <- prev2022scores |> 
   select(institut,variable,score) |> 
-  pivot_wider(names_from = variable, values_from = score) |> 
-  rowwise() |> 
-  mutate(score_total = (PIB+IPCH+Chomage+`Solde public`),
-         score_pondéré = (0.5*PIB+0.2*Chomage+0.2*`Solde public`+0.1*IPCH))
+  pivot_wider(names_from = variable, values_from = score) 
   
 
 

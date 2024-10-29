@@ -50,10 +50,11 @@ Pour chaque variable on calcule un score :
 $$score_{i,k}= \frac{|[|\varepsilon_{i,k}|-min(|\varepsilon_{k}|)]|}{\sigma_{|\varepsilon_k|}}$$
 Avec $\varepsilon$ l'erreur de prévision pour la variable $k$.
 
+On calcule soit un score "brut" comme somme des scores par variables,
+soit un score pondéré.
 
-On calcule soit un score "brut" comme somme des scores par variables, soit un score pondéré.
-
-  - Pour l'instant la pondération : 0.5 x PIB ; 0.2 x Chomage ; 0.2 x Solde; 0.1 x IPCH
+-   Pour l'instant la pondération : 0.5 x PIB ; 0.2 x Chomage ; 0.2 x
+    Solde; 0.1 x IPCH
 
 ## Classement par score
 
@@ -89,19 +90,21 @@ gt_scores
 
 ## Rappel méthodo
 
-- 1 classement par variable
-  - 4 variables : PIB, inflation (IPCH), chômage, solde public.
-  
-- Classement par ordre croisssant d'erreur de prévision (en valeur absolue).
+-   1 classement par variable
 
-- Prévisions manquantes: on impute la valeur de la pire prévision.
+    -   4 variables : PIB, inflation (IPCH), chômage, solde public.
 
-- J'ai ajouté une colonne "Total" qui fait la moyenne des classements par variable
-  - (Pour essayer de pénaliser les prévisions incohérentes...)
+-   Classement par ordre croisssant d'erreur de prévision (en valeur
+    absolue).
 
+-   Prévisions manquantes: on impute la valeur de la pire prévision.
+
+-   J'ai ajouté une colonne "Total" qui fait la moyenne des classements
+    par variable
+
+    -   (Pour essayer de pénaliser les prévisions incohérentes...)
 
 ## Prévisions 2022 pour l'année 2023:
-
 
 ```{r}
 
@@ -193,12 +196,13 @@ tab_options(
 gt_2023b
 ```
 
-
 # Annexe
 
 ## Previsions 2022 pour 2023
 
-PIB +1.1% ; Chomage 7.5% (fin d'année) ; IPCH +4.2% (fin d'année) ; Solde public -5.5%
+PIB +1.1% ; Chomage 7.5% (fin d'année) ; IPCH +4.2% (fin d'année) ;
+Solde public -5.5%
+
 ```{r}
 prev2022 |> 
   select(institut,variable, Prev2022_2023) |> 
@@ -215,4 +219,3 @@ prev2022 |>
 tab_options(
   table.font.size = 18) 
 ```
-
